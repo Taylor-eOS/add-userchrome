@@ -12,7 +12,7 @@ nav-bar * { visibility: collapse !important; }
 }
 """)
 
-def process(path,apply):
+def process(path, check):
     chrome_dir=os.path.join(path,"chrome")
     target=os.path.join(chrome_dir,"userChrome.css")
     os.makedirs(chrome_dir,exist_ok=True)
@@ -24,8 +24,8 @@ def process(path,apply):
     if "display: none !important;" in content:
         print(f"{os.path.basename(path)}: already up to date")
     else:
-        print(f"{os.path.basename(path)}: will append CSS" if not apply else f"{os.path.basename(path)}: appending CSS")
-        if apply:
+        print(f"{os.path.basename(path)}: should append CSS" if check else f"{os.path.basename(path)}: **appending CSS")
+        if not check:
             with open(target,"a",encoding="utf-8") as f:
                 if content and not content.endswith("\n"):
                     f.write("\n")
@@ -33,16 +33,16 @@ def process(path,apply):
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--apply",action="store_true",help="actually write changes")
+    parser.add_argument("--check",action="store_true",help="Don't actually write changes")
     args=parser.parse_args()
     base=os.path.expanduser("~/.local/share/ice/firefox")
     if not os.path.isdir(base):
-        print("firefox folder not found at",base)
+        print("Firefox folder not found at",base)
         return
     for name in os.listdir(base):
         p=os.path.join(base,name)
         if os.path.isdir(p):
-            process(p,args.apply)
+            process(p, args.check)
 
 if __name__=="__main__":
     main()
