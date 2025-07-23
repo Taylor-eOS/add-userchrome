@@ -13,20 +13,20 @@ nav-bar * { visibility: collapse !important; }
 """)
 
 def process(path, check):
-    chrome_dir=os.path.join(path,"chrome")
-    target=os.path.join(chrome_dir,"userChrome.css")
-    os.makedirs(chrome_dir,exist_ok=True)
-    if os.path.exists(target):
-        with open(target,"r",encoding="utf-8") as f:
-            content=f.read()
-    else:
-        content=""
+    chrome_dir = os.path.join(path, "chrome")
+    target = os.path.join(chrome_dir, "userChrome.css")
+    os.makedirs(chrome_dir, exist_ok=True)
+    if not os.path.exists(target):
+        print(f"{os.path.basename(path)}: userChrome.css does not exist")
+        return
+    with open(target, "r", encoding="utf-8") as f:
+        content = f.read()
     if "display: none !important;" in content:
         print(f"{os.path.basename(path)}: already up to date")
     else:
         print(f"{os.path.basename(path)}: should append CSS" if check else f"{os.path.basename(path)}: **appending CSS")
         if not check:
-            with open(target,"a",encoding="utf-8") as f:
+            with open(target, "a", encoding="utf-8") as f:
                 if content and not content.endswith("\n"):
                     f.write("\n")
                 f.write(CSS_BLOCK)
