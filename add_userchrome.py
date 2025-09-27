@@ -22,7 +22,7 @@ def process(path, check):
     with open(target, "r", encoding="utf-8") as f:
         content = f.read()
     if "display: none !important;" in content:
-        print(f"{os.path.basename(path)}: already up to date")
+        print(f"{os.path.basename(path)}: ok")
     else:
         print(f"{os.path.basename(path)}: should append CSS" if check else f"{os.path.basename(path)}: **appending CSS")
         if not check:
