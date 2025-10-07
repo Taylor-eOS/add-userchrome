@@ -11,6 +11,8 @@ nav-bar * { visibility: collapse !important; }
   display: none !important;
 }
 """)
+OK_ADDITION_STRING = "ok"
+APPENDING_ADDITION_STRING = "Appending CSS to userchrome"
 
 def process(path, check):
     chrome_dir = os.path.join(path, "chrome")
@@ -22,9 +24,9 @@ def process(path, check):
     with open(target, "r", encoding="utf-8") as f:
         content = f.read()
     if "display: none !important;" in content:
-        print(f"{os.path.basename(path)}: ok")
+        print(f"{os.path.basename(path)}: {OK_ADDITION_STRING}")
     else:
-        print(f"{os.path.basename(path)}: should append CSS" if check else f"{os.path.basename(path)}: **appending CSS")
+        print(f"{os.path.basename(path)}: should append CSS" if check else f"{os.path.basename(path)}: {APPENDING_ADDITION_STRING}")
         if not check:
             with open(target, "a", encoding="utf-8") as f:
                 if content and not content.endswith("\n"):
